@@ -16,7 +16,7 @@ except FileNotFoundError:
     with open('prefixDict.json','w') as f:
         json.dump(prefixDict, f)
 
-@client.event
+@@client.event
 async def on_message(message):
     now = datetime.now()
     prefix = ""
@@ -34,7 +34,7 @@ async def on_message(message):
             json.dump(prefixDict, f)
             await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
 # ghostPing
-    if message.content == prefix + "ghost" or message.content == "<@!BOT ID GOES HERE>":
+    if message.content == prefix + "ghost" or message.content == f"<@!{client.user.id}>":
         await message.channel.send('@everyone')
         f = open("Ghoster_logs.txt", "a")
         f.write("User " + str(message.author.id)
@@ -56,29 +56,28 @@ async def on_message(message):
         await message.delete()
 # send message as code block from bot
     if message.content.startswith(prefix + "send "):
-        await message.channel.send(f"``` {message.content[6:]} ``` " )
+        await message.channel.send(f"```{message.content[6:]}```")
         await message.delete()
 # help command
     if message.content == prefix + "help":
-        await message.channel.send(f'''
-```
+        await message.channel.send(f'''```
 Commands:
 {prefix}help - displays this message
 {prefix}ping - replies Pong.
 {prefix}pong - replies Ping. 
-{prefix}no - replies OK
 {prefix}send - makes the bot send the message in a code block, like this.
-
-```
-        ''')
+yes - replies no
+no - replies yes
+```''')
 #Fun text commands
-    if message.content == prefix + "no":
-        await message.channel.send("yes")
-    if message.content == prefix + "yes":
-        await message.channel.send("no")
-    if message.content == prefix + "ping":
-        await message.channel.send("`Pong!`")
-    if message.content == prefix + "pong":
-        await message.channel.send("`Ping!`")
+    if message.author.id != client.user.id:
+        if message.content == prefix + "ping":
+            await message.channel.send(content="`Pong!`",reference=message,mention_author=False)
+        if message.content == prefix + "pong":
+            await message.channel.send(content="`Ping!`",reference=message,mention_author=False)
+        if message.content == "yes":
+            await message.channel.send(content="no",reference=message,mention_author=False)
+        if message.content == "no":
+            await message.channel.send(content="yes",reference=message,mention_author=False)
 
 client.run('BOT TOKEN GOES HERE')
