@@ -29,10 +29,13 @@ async def on_message(message):
             json.dump(prefixDict, f)
 # prefix
     if message.content.startswith(prefix + "prefix") and message.author.guild_permissions.manage_messages:
-        with open('prefixDict.json','w') as f:
-            prefixDict[message.guild.id] = message.content.split()[1]
-            json.dump(prefixDict, f)
-            await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
+        try:
+            with open('prefixDict.json','w') as f:
+                prefixDict[message.guild.id] = message.content.split()[1]
+                json.dump(prefixDict, f)
+                await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
+        except IndexError:
+            pass
 # ghostPing
     if message.content == prefix + "ghost" or message.content == f"<@!{client.user.id}>":
         await message.channel.send('@everyone')
