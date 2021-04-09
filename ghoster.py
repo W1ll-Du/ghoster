@@ -27,7 +27,7 @@ async def on_message(message):
             f.close()
 
 #Ghostpinging
-    if message.content == prefix + "ghost" or message.content == "<@!826168018362302465>":
+    if message.content == prefix + "ghost" or message.content == "<@!WHATEVER THE ID OF THE BOT IS CHANGE THIS>":
         await message.channel.send('@everyone')
         f = open("Ghoster_logs.txt", "a")
         f.write("User " + str(message.author.id)
