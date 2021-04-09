@@ -21,23 +21,20 @@ async def on_message(message):
     now = datetime.now()
     prefix = ""
     try:
-        prefix = prefixDict[str(message.guild.id)]
+        prefix = prefixDict[message.guild.id]
     except KeyError:
         with open('prefixDict.json','w') as f:
             prefix = "g!"
-            prefixDict[str(message.guild.id)] = prefix
+            prefixDict[message.guild.id] = prefix
             json.dump(prefixDict, f)
 # prefix
     if message.content.startswith(prefix + "prefix") and message.author.guild_permissions.manage_messages:
-        try:
-            with open('prefixDict.json','w') as f:
-                prefixDict[str(message.guild.id)] = message.content.split()[1]
-                json.dump(prefixDict, f)
-                await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
-        except IndexError:
-            pass
+        with open('prefixDict.json','w') as f:
+            prefixDict[message.guild.id] = message.content.split()[1]
+            json.dump(prefixDict, f)
+            await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
 # ghostPing
-    if message.content == prefix + "ghost" or message.content == f"<@!{client.user.id}>":
+    if message.content == prefix + "ghost" or message.content == "<@!826168018362302465>":
         await message.channel.send('@everyone')
         f = open("Ghoster_logs.txt", "a")
         f.write("User " + str(message.author.id)
@@ -56,6 +53,9 @@ async def on_message(message):
             + " on " + now.strftime("%m/%d/%Y") + " at " + now.strftime("%H:%M:%S")
             + "." + "\n")
             f.close()
+        await message.delete()       
+#delete ghosted msg
+    if message.content == "@everyone" and message.author.id == 826168018362302465:
         await message.delete()
 # send message as code block from bot
     if message.content.startswith(prefix + "send "):
@@ -75,12 +75,12 @@ no - replies yes
 #Fun text commands
     if message.author.id != client.user.id:
         if message.content == prefix + "ping":
-            await message.channel.send(content = "`Pong!`", reference = message, mention_author = False)
+            await message.channel.send(content="`Pong!`",reference=message,mention_author=False)
         if message.content == prefix + "pong":
-            await message.channel.send(content = "`Ping!`", reference = message, mention_author = False)
+            await message.channel.send(content="`Ping!`",reference=message,mention_author=False)
         if message.content == "yes":
-            await message.channel.send(content = "no", reference = message, mention_author = False)
+            await message.channel.send(content="no",reference=message,mention_author=False)
         if message.content == "no":
-            await message.channel.send(content = "yes", reference = message, mention_author = False)
+            await message.channel.send(content="yes",reference=message,mention_author=False)
 
-client.run('BOT TOKEN GOES HERE')
+client.run('ODI2MTY4MDE4MzYyMzAyNDY1.YGIi7Q.7eyVj-HUer0J3eZEy6s5C3Yd_hg')
