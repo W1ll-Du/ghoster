@@ -75,12 +75,12 @@ no - replies yes
 #Fun text commands
     if message.author.id != client.user.id:
         if message.content == prefix + "ping":
-            await message.channel.send(content="`Pong!`",reference=message,mention_author=False)
+            await message.channel.send(content = "`Pong!`", reference = message, mention_author = False)
         if message.content == prefix + "pong":
-            await message.channel.send(content="`Ping!`",reference=message,mention_author=False)
+            await message.channel.send(content = "`Ping!`", reference = message, mention_author = False)
         if message.content == "yes":
-            await message.channel.send(content="no",reference=message,mention_author=False)
+            await message.channel.send(content = "no", reference = message, mention_author = False)
         if message.content == "no":
-            await message.channel.send(content="yes",reference=message,mention_author=False)
+            await message.channel.send(content = "yes", reference = message, mention_author = False)
 
 client.run('BOT TOKEN GOES HERE')
