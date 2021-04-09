@@ -16,22 +16,22 @@ except FileNotFoundError:
     with open('prefixDict.json','w') as f:
         json.dump(prefixDict, f)
 
-@@client.event
+@client.event
 async def on_message(message):
     now = datetime.now()
     prefix = ""
     try:
-        prefix = prefixDict[message.guild.id]
+        prefix = prefixDict[str(message.guild.id)]
     except KeyError:
         with open('prefixDict.json','w') as f:
             prefix = "g!"
-            prefixDict[message.guild.id] = prefix
+            prefixDict[str(message.guild.id)] = prefix
             json.dump(prefixDict, f)
 # prefix
     if message.content.startswith(prefix + "prefix") and message.author.guild_permissions.manage_messages:
         try:
             with open('prefixDict.json','w') as f:
-                prefixDict[message.guild.id] = message.content.split()[1]
+                prefixDict[str(message.guild.id)] = message.content.split()[1]
                 json.dump(prefixDict, f)
                 await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
         except IndexError:
