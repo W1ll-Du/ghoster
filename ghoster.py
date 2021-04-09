@@ -34,7 +34,7 @@ async def on_message(message):
             json.dump(prefixDict, f)
             await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
 # ghostPing
-    if message.content == prefix + "ghost" or message.content == "<@!826168018362302465>":
+    if message.content == prefix + "ghost" or message.content == "<@!BOT ID GOES HERE>":
         await message.channel.send('@everyone')
         f = open("Ghoster_logs.txt", "a")
         f.write("User " + str(message.author.id)
@@ -81,4 +81,4 @@ Commands:
     if message.content == prefix + "pong":
         await message.channel.send("`Ping!`")
 
-client.run('ODI2MTY4MDE4MzYyMzAyNDY1.YGIi7Q.wwq-jY2GsxtBrbBiUWldSdHBRIQ')
+client.run('BOT TOKEN GOES HERE')
