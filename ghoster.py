@@ -27,7 +27,9 @@ async def on_message(message):
             prefixDict[str(message.guild.id)] = prefix
             json.dump(prefixDict, f)
 # prefix
-    if message.content.startswith(prefix + "prefix") and message.author.guild_permissions.manage_messages and len(message.content.split()) >= 2:
+    if (message.content.startswith(prefix + "prefix")
+        and message.author.guild_permissions.manage_messages
+        and len(message.content.split()) >= 2):
         with open('prefixDict.json','w') as f:
             prefixDict[str(message.guild.id)] = message.content.split()[1]
             json.dump(prefixDict, f)
