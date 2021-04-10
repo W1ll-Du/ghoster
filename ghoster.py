@@ -19,23 +19,19 @@ except FileNotFoundError:
 @client.event
 async def on_message(message):
     now = datetime.now()
-    prefix = ""
-    try:
+    prefix = "g!"
+    if str(message.guild.id) in prefixDict.keys():
         prefix = prefixDict[str(message.guild.id)]
-    except KeyError:
+    else:
         with open('prefixDict.json','w') as f:
-            prefix = "g!"
             prefixDict[str(message.guild.id)] = prefix
             json.dump(prefixDict, f)
 # prefix
-    if message.content.startswith(prefix + "prefix") and message.author.guild_permissions.manage_messages:
-        try:
-            with open('prefixDict.json','w') as f:
-                prefixDict[str(message.guild.id)] = message.content.split()[1]
-                json.dump(prefixDict, f)
-                await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
-        except IndexError:
-            pass
+    if message.content.startswith(prefix + "prefix") and message.author.guild_permissions.manage_messages and len(message.content.split()) >= 2:
+        with open('prefixDict.json','w') as f:
+            prefixDict[str(message.guild.id)] = message.content.split()[1]
+            json.dump(prefixDict, f)
+            await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
 # ghostPing
     if message.content == prefix + "ghost" or message.content == f"<@!{client.user.id}>":
         await message.channel.send('@everyone')
