@@ -8,6 +8,7 @@ client = discord.Client()
 async def on_ready():
     print('Logged in!')
 
+# load prefixDict
 prefixDict = {}
 try:
     with open('prefixDict.json','r') as f:
@@ -19,6 +20,7 @@ except FileNotFoundError:
 @client.event
 async def on_message(message):
     now = datetime.now()
+    # get prefix, default is g!
     prefix = "g!"
     if str(message.guild.id) in prefixDict.keys():
         prefix = prefixDict[str(message.guild.id)]
@@ -26,7 +28,7 @@ async def on_message(message):
         with open('prefixDict.json','w') as f:
             prefixDict[str(message.guild.id)] = prefix
             json.dump(prefixDict, f)
-# prefix
+    # change prefix
     if (message.content.startswith(prefix + "prefix")
         and message.author.guild_permissions.manage_messages
         and len(message.content.split()) >= 2):
@@ -34,9 +36,9 @@ async def on_message(message):
             prefixDict[str(message.guild.id)] = message.content.split()[1]
             json.dump(prefixDict, f)
             await message.channel.send(f"Success! My new prefix is {message.content.split()[1]}")
-# ghostPing
+    # ghostPing
     if message.content == prefix + "ghost" or message.content == f"<@!{client.user.id}>":
-        await message.channel.send('@everyone')
+        await message.channel.send("@everyone")
         f = open("Ghoster_logs.txt", "a")
         f.write("User " + str(message.author.id)
         + " ghostpinged in channel "+ str(message.channel.id)
@@ -45,8 +47,11 @@ async def on_message(message):
         + "." + "\n")
         f.close()
         await message.delete()
-# message auto-deletion
-    if message.content.startswith(prefix + "ghost"):
+    # delete ghostPing
+    if message.content == "@everyone" and message.author.id == client.user.id:
+        await message.delete()
+    # message auto-deletion
+    if message.content.startswith(prefix + "ghost "):
         with open("Ghoster_logs.txt", "a") as f:
             f.write("User " + str(message.author.id)
             + " deleted " + str(message.content) + "in channel" + str(message.channel.id)
@@ -55,11 +60,11 @@ async def on_message(message):
             + "." + "\n")
             f.close()
         await message.delete()
-# send message as code block from bot
+    # send message as code block from bot
     if message.content.startswith(prefix + "send "):
-        await message.channel.send(f"```{message.content[6:]}```")
+        await message.channel.send(f"```{message.content[5 + len(prefix):]}```")
         await message.delete()
-# help command
+    # help command
     if message.content == prefix + "help":
         await message.channel.send(f'''```
 Commands:
@@ -70,8 +75,10 @@ Commands:
 yes - replies no
 no - replies yes
 ```''')
-#Fun text commands
+    # ghost commands are private, do not show up in help
+    # fun text commands
     if message.author.id != client.user.id:
+    # prevents infinite yes/no loop from replying to self
         if message.content == prefix + "ping":
             await message.channel.send(content = "`Pong!`", reference = message, mention_author = False)
         if message.content == prefix + "pong":
